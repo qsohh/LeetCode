@@ -8,7 +8,7 @@ hash_num = {'a': 2, 'b': 3, 'c': 5, 'd': 7, 'e': 11, 'f': 13, 'g': 17, 'h': 19, 
 
 Search `target: int` in `numbers: List[int]`, which is non-decreasing.
 
-Search `numbers[mp]` that is exactly EAUAL to `target` (so that `numbers` is strictly increasing):
+Search `numbers[mp]` that is exactly EQUAL to `target` (so that `numbers` is strictly increasing):
 
 ```python
 left, right, mid = 0, len(numbers) - 1, len(numbers)//2
