@@ -19,7 +19,7 @@ while left < right:
         right = mid - 1
     else:
         left = mid + 1
-    mid = (left + right) // 2
+    mid = left + (right - left) // 2
 return mid if numbers[mid] == target else False # consider the case if target not in the list
 ```
 
@@ -34,6 +34,6 @@ while left < right:
         right = mid - 1
     else:
         left = mid
-    mid = (left + right) // 2
+    mid = left + (right - left) // 2
 return mid
 ```
