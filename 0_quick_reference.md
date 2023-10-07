@@ -52,3 +52,21 @@ while left < right:
     mid = left + (right - left) // 2
 return mid
 ```
+
+# Fermat's little thm related
+
+As $a^{p-1} \equiv 1 \pmod{p}$ (attention to the hyps), it can be induced that $a^{p-2} \equiv a^{-1} \pmod{p}$.
+
+```python
+def InverseMod(a, m=MOD):
+    return pow(a, m-2, m)
+
+def PowerMod(a, p, m=MOD):
+    return pow(a, p, m)
+
+@cache
+def FactorialMod(a, m=MOD):
+    if a < 2:
+        return 1
+    return FactorialMod(a-1, m)*a%m
+```
