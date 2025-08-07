@@ -67,6 +67,18 @@ while left < right:
 return mid
 ```
 
+or just 
+
+```python
+bisect.bisect_left(numbers, target, lo=left, hi=right, key==fct_key)
+```
+
+See also
+
+```python
+bisect.bisect_right(numbers, target, lo=left, hi=right, key=fct_key)
+```
+
 # Fermat's little thm related
 
 As $a^{p-1} \equiv 1 \pmod{p}$ (attention to the hyps), it can be induced that $a^{p-2} \equiv a^{-1} \pmod{p}$.
@@ -83,4 +95,95 @@ def FactorialMod(a, m=MOD):
     if a < 2:
         return 1
     return FactorialMod(a-1, m)*a%m
+```
+
+# Mo's algorithm
+
+莫队算法
+
+# Segment Tree
+
+A segment tree is adapted for works like searching loacl sum/max or prefix sum/max.
+
+To be refined as template.
+
+The algorithmic structure of Segment Tree (local maximum, taking [LeetCode 3479](https://leetcode.com/problems/fruits-into-baskets-iii)):
+
+```python
+class TreeNode():
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+class SegmentTree(TreeNode):
+    def __init__(self, data):
+        if len(data) == 1:
+            self.val = data[0]
+            self.left = None
+            self.right = None
+        elif len(data) == 2:
+            self.val = max(data)
+            self.left = SegmentTree([data[0]])
+            self.right = SegmentTree([data[1]])
+        else:
+            n = len(data)
+            self.left = SegmentTree(data[:(n+1)//2])
+            self.right = SegmentTree(data[(n+1)//2:])
+            self.val = max(self.left.val, self.right.val)
+
+    def pot(self):
+        # Pre-order Traversal
+        if not self.left:
+            return str(self.val)
+        return ", ".join([self.left.pot(), self.right.pot()])
+    
+    def search(self, target):
+        # DFS search the target
+        # if found, change the local max along all path if needed, return True; 
+        # if not found, return False
+        if self.val < target:
+            return False
+        if not self.left:
+            self.val = 0
+            return True
+        if self.left.val >= target:
+            self.left.search(target)
+        else:
+            self.right.search(target)
+        self.val = max(self.left.val, self.right.val)
+        return True
+```
+
+Flattened list structure:
+
+```python
+class SegmentTree():
+    def __init__(self, data):
+        n = len(data)
+        self.size = 1
+        while self.size <= n:
+            self.size *= 2
+        self.size = self.size*2
+        self.tree = [0] * self.size
+        self.tree[self.size//2:self.size//2+n] = data
+        # For treenode at idx, its left child is at 2*idx, and right is at 2*idx+1
+        for idx in range(self.size//2-1, -1, -1):
+            self.tree[idx] = max(self.tree[2*idx], self.tree[2*idx+1])
+
+    def search(self, target, idx=1):
+        # DFS search the target
+        # if found, change the local max along all path if needed, return True;
+        # if not found, return False
+        if self.tree[idx] < target:
+            return False
+        if idx >= self.size//2:
+            self.tree[idx] = 0
+            return True
+        if self.tree[2*idx] >= target:
+            self.search(target, 2*idx)
+        else:
+            self.search(target, 2*idx+1)
+        self.tree[idx] = max(self.tree[2*idx], self.tree[2*idx+1])
+        return True
 ```
